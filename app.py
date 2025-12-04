@@ -216,8 +216,12 @@ async def vectorize_url(
 
         documents = []
         for result in crawl_result["results"]:
+            raw_content = result.get("raw_content")
+            if not raw_content:  # Skip if None, empty string, or falsy
+                continue
+            
             doc = Document(
-                page_content=result.get("raw_content", ""),
+                page_content=raw_content,
                 metadata={
                     "url": result.get("url", ""),
                     "thread_id": body.thread_id,
